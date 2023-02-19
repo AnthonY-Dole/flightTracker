@@ -16,10 +16,11 @@ type MapProps = {
   Content: React.ElementType;
   planes: Array<any>;
   selectedPlane: any;
-  selectPlane: (id: any) => void;
+  selectPlane: (id: any, isOpen: boolean) => void;
+  open: boolean;
 };
 const Map = forwardRef<L.Map, MapProps>((props, ref) => {
-  const { Content, planes, selectedPlane, selectPlane } = props;
+  const { Content, planes, selectedPlane, selectPlane, open } = props;
 
   // const UserMove = () => {
   //   const map = useMapEvent("moveend", () => {
@@ -85,6 +86,7 @@ const Map = forwardRef<L.Map, MapProps>((props, ref) => {
               airline_icao={x.airline_icao}
               flag={x.flag}
               selectPlane={selectPlane}
+              open={open}
             />
           </>
         ))}

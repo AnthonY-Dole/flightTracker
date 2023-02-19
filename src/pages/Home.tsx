@@ -3,15 +3,16 @@ import Map from "../Components/Map";
 import CustomAppBar from "../Components/AppBar";
 import Detail from "../Components/Detail";
 import { useMapEvent } from "react-leaflet";
-import { getAPI } from "../api";
+import { getAPI } from "../utils/api";
 const { VITE_APP_API_KEY_AIRLABS } = import.meta.env;
+import { getPlanesbyBounds } from "../services/api";
 
 const Home = () => {
   const [allPlanes, setAllPlanes] = useState<Array<any>>([]);
   const [selectedPlane, setSelectedPlane] = useState<any>(null);
   const [open, setOpen] = useState(false);
   const mapRef = useRef<L.Map>(null);
-  const getPlanesbyBounds = (bounds: L.LatLngBounds) => {
+  const getPlanesbyBoundss = (bounds: L.LatLngBounds) => {
     getAPI(
       `flights?api_key=${VITE_APP_API_KEY_AIRLABS}&bbox=${
         bounds.getSouthWest().lat
@@ -27,16 +28,17 @@ const Home = () => {
     });
   };
 
-  const selectPlane = (id: any) => {
-    return setSelectedPlane(allPlanes[id]);
+  const selectPlane = (id: any, isOpen: boolean) => {
+    setOpen(isOpen);
+    setSelectedPlane(allPlanes[id]);
   };
 
   const UserBounds = () => {
     const mapMove = useMapEvent("moveend", () => {
-      getPlanesbyBounds(mapMove.getBounds());
+      getPlanesbyBoundss(mapMove.getBounds());
     });
     const mapZoom = useMapEvent("zoomend", () => {
-      getPlanesbyBounds(mapZoom.getBounds());
+      getPlanesbyBoundss(mapZoom.getBounds());
     });
 
     return null;
@@ -63,6 +65,7 @@ const Home = () => {
         ref={mapRef}
         selectedPlane={selectedPlane}
         selectPlane={selectPlane}
+        open={open}
       />
     </>
   );

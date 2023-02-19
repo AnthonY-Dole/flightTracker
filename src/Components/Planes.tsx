@@ -19,7 +19,8 @@ type PlanesProps = {
   airline_icao: string;
   direction: number;
   id: number;
-  selectPlane: (id: any) => void;
+  selectPlane: (id: any, isOpen: boolean) => void;
+  open: boolean;
 };
 
 const Planes = (props: PlanesProps) => {
@@ -36,6 +37,7 @@ const Planes = (props: PlanesProps) => {
     airline_icao,
     direction,
     selectPlane,
+    open,
     id,
   } = props;
 
@@ -62,8 +64,12 @@ const Planes = (props: PlanesProps) => {
       duration={2000}
       eventHandlers={{
         click: () => {
-          selectPlane(id);
+          selectPlane(id, true);
           markerRef.current.openPopup();
+        },
+        dblclick: () => {
+          selectPlane(id, false);
+          markerRef.current.closePopup();
         },
       }}
     >
