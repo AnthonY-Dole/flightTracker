@@ -19,12 +19,12 @@ type PlanesProps = {
   airline_icao: string;
   direction: number;
   id: number;
+  selectPlane: (id: any) => void;
 };
 
 const Planes = (props: PlanesProps) => {
   const {
     location,
-    key,
     lat,
     lng,
     alt,
@@ -35,6 +35,7 @@ const Planes = (props: PlanesProps) => {
     reg_number,
     airline_icao,
     direction,
+    selectPlane,
     id,
   } = props;
 
@@ -59,39 +60,13 @@ const Planes = (props: PlanesProps) => {
       position={[lat, lng]}
       previousPosition={prevPos as LatLngExpression}
       duration={2000}
+      eventHandlers={{
+        click: () => {
+          selectPlane(id);
+          markerRef.current.openPopup();
+        },
+      }}
     >
-      <Popup>
-        <div className="">
-          <h2 className="">Altitude: {alt} ft</h2>
-          <p className="">Speed: {speed} km/h</p>
-        </div>
-        <div className="">
-          <img
-            src={`https://flagsapi.com/${flag}/flat/64.png`}
-            alt="drapeau"
-            className=""
-          />
-          <h5 className="">
-            Flight Number: {flight_number}
-            Status: {status}
-          </h5>
-          <p>Airline: {airline_icao}</p>
-
-          <p>test{key}</p>
-
-          <button className="" onClick={(e) => HandleCopy()}>
-            {isCopied ? (
-              <>
-                <h5 className="">Link Copied!!</h5>
-              </>
-            ) : (
-              <>
-                <h5 className="">Copy link</h5>
-              </>
-            )}
-          </button>
-        </div>
-      </Popup>
       <Tooltip>
         {airline_icao && flight_number ? (
           <>

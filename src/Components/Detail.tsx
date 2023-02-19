@@ -1,9 +1,15 @@
 import { Box, Card, CardContent, Typography } from "@mui/material";
 import React from "react";
 
-type DetailProps = {};
+type DetailProps = {
+  selectedPlane: any;
+  selectPlane: any;
+  open: boolean;
+};
 
-const Detail = ({}: DetailProps) => {
+const Detail = (props: DetailProps) => {
+  const { selectedPlane, selectPlane, open } = props;
+
   return (
     <Box
       sx={{
@@ -24,9 +30,34 @@ const Detail = ({}: DetailProps) => {
         }}
       >
         <CardContent>
-          <Typography variant="h5" component="div">
-            Word of the Day
-          </Typography>
+          <div className="">
+            <h2 className="">Altitude: {selectedPlane?.alt} ft</h2>
+            <p className="">Speed: {selectedPlane?.speed} km/h</p>
+          </div>
+          <div className="">
+            <img
+              src={`https://flagsapi.com/${selectedPlane?.flag}/flat/64.png`}
+              alt="drapeau"
+              className=""
+            />
+            <h5 className="">
+              Flight Number: {selectedPlane?.flight_number}
+              Status: {selectedPlane?.status}
+            </h5>
+            <p>Airline: {selectedPlane?.airline_icao}</p>
+
+            {/* <button className="" onClick={(e) => HandleCopy()}>
+              {isCopied ? (
+                <>
+                  <h5 className="">Link Copied!!</h5>
+                </>
+              ) : (
+                <>
+                  <h5 className="">Copy link</h5>
+                </>
+              )}
+            </button> */}
+          </div>
         </CardContent>
       </Card>
     </Box>

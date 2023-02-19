@@ -7,29 +7,19 @@ import {
 } from "react-leaflet";
 import L, { map } from "leaflet";
 import "leaflet/dist/leaflet.css";
-import {
-  ReactComponentElement,
-  forwardRef,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { getAPI } from "../api";
+import { forwardRef } from "react";
 import SearchUserLocalisation from "../Components/SearchUserLocation";
 import Planes from "./Planes";
-import { Padding, South } from "@mui/icons-material";
-const {
-  VITE_APP_API_KEY_MAP_BOX,
-  VITE_APP_API_MAP_BOX,
-  VITE_APP_API_KEY_AIRLABS,
-} = import.meta.env;
+const { VITE_APP_API_KEY_MAP_BOX, VITE_APP_API_MAP_BOX } = import.meta.env;
 
 type MapProps = {
   Content: React.ElementType;
   planes: Array<any>;
+  selectedPlane: any;
+  selectPlane: (id: any) => void;
 };
 const Map = forwardRef<L.Map, MapProps>((props, ref) => {
-  const { Content, planes } = props;
+  const { Content, planes, selectedPlane, selectPlane } = props;
 
   // const UserMove = () => {
   //   const map = useMapEvent("moveend", () => {
@@ -94,6 +84,7 @@ const Map = forwardRef<L.Map, MapProps>((props, ref) => {
               status={x.status}
               airline_icao={x.airline_icao}
               flag={x.flag}
+              selectPlane={selectPlane}
             />
           </>
         ))}

@@ -8,6 +8,8 @@ const { VITE_APP_API_KEY_AIRLABS } = import.meta.env;
 
 const Home = () => {
   const [allPlanes, setAllPlanes] = useState<Array<any>>([]);
+  const [selectedPlane, setSelectedPlane] = useState<any>(null);
+  const [open, setOpen] = useState(false);
   const mapRef = useRef<L.Map>(null);
   const getPlanesbyBounds = (bounds: L.LatLngBounds) => {
     getAPI(
@@ -23,6 +25,10 @@ const Home = () => {
         console.log(res);
       }
     });
+  };
+
+  const selectPlane = (id: any) => {
+    return setSelectedPlane(allPlanes[id]);
   };
 
   const UserBounds = () => {
@@ -46,8 +52,18 @@ const Home = () => {
   return (
     <>
       <CustomAppBar />
-      <Detail />
-      <Map Content={UserBounds} planes={allPlanes} ref={mapRef} />
+      <Detail
+        selectedPlane={selectedPlane}
+        selectPlane={selectPlane}
+        open={open}
+      />
+      <Map
+        Content={UserBounds}
+        planes={allPlanes}
+        ref={mapRef}
+        selectedPlane={selectedPlane}
+        selectPlane={selectPlane}
+      />
     </>
   );
 };
