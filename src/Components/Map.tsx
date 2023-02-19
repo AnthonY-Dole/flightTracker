@@ -7,7 +7,13 @@ import {
 } from "react-leaflet";
 import L, { map } from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { useEffect, useRef, useState } from "react";
+import {
+  ReactComponentElement,
+  forwardRef,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { getAPI } from "../api";
 import SearchUserLocalisation from "../Components/SearchUserLocation";
 import Planes from "./Planes";
@@ -17,41 +23,13 @@ const {
   VITE_APP_API_MAP_BOX,
   VITE_APP_API_KEY_AIRLABS,
 } = import.meta.env;
-const Map = () => {
-  const [allPlanes, setAllPlanes] = useState<Array<any>>([]);
-  // const [bounds, setBounds] = useState<L.LatLngBounds>(
-  //   new L.LatLngBounds(new L.LatLng(0, 0), new L.LatLng(0, 0))
-  // );
-  const mapRef = useRef<L.Map>(null);
 
-  type Bounds = L.LatLngBounds;
-
-  const getPlanesbyBounds = (bounds: Bounds) => {
-    getAPI(
-      `flights?api_key=${VITE_APP_API_KEY_AIRLABS}&bbox=${
-        bounds.getSouthWest().lat
-      },${bounds.getSouthWest().lng},${bounds.getNorthEast().lat},${
-        bounds.getNorthEast().lng
-      }`
-    ).then((res) => {
-      if (res.status === 200) {
-        setAllPlanes(res.data.response);
-      } else {
-        console.log(res);
-      }
-    });
-  };
-
-  const UserBounds = () => {
-    const mapMove = useMapEvent("moveend", () => {
-      getPlanesbyBounds(mapMove.getBounds());
-    });
-    const mapZoom = useMapEvent("zoomend", () => {
-      getPlanesbyBounds(mapZoom.getBounds());
-    });
-
-    return null;
-  };
+type MapProps = {
+  Content: React.ElementType;
+  planes: Array<any>;
+};
+const Map = forwardRef<L.Map, MapProps>((props, ref) => {
+  const { Content, planes } = props;
 
   // const UserMove = () => {
   //   const map = useMapEvent("moveend", () => {
@@ -67,17 +45,11 @@ const Map = () => {
   //   });
   //   return null;
   // };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      // if (mapRef.current) getPlanesbyBounds(mapRef.current.getBounds());
-    }, 20000);
-    return () => clearInterval(interval);
-  }, []);
+  //const Mapref = useRef<L.Map>(null);
 
   return (
     <MapContainer
-      ref={mapRef}
+      ref={ref}
       preferCanvas={true}
       center={[48.856614, 2.3522219]}
       boundsOptions={{ padding: [50, 50] }}
@@ -100,9 +72,9 @@ const Map = () => {
       />
       <SearchUserLocalisation />
 
-      <UserBounds />
+      <Content />
 
-      {allPlanes
+      {planes
         ?.filter(
           (p: any) =>
             p.hex !== null && p.status !== "landed" && p.status !== "unknown"
@@ -127,6 +99,6 @@ const Map = () => {
         ))}
     </MapContainer>
   );
-};
+});
 
 export default Map;
