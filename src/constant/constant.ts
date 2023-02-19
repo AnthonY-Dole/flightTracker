@@ -3,9 +3,9 @@ import * as L from "leaflet";
 
 const Plane = new L.Icon({
   iconUrl: PlaneSVG,
-  iconSize: [50, 50],
+  iconSize: [30, 30],
   iconAnchor: [25, 25],
-  popupAnchor: [0, -25],
+  popupAnchor: [0, -15],
 });
 
 export default Plane;

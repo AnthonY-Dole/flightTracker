@@ -43,7 +43,6 @@ export const getAPI = async (url: string): Promise<any> => {
     url: `${postConfig.baseUrl}/${url}`,
   })
     .then((response) => {
-      console.log(response);
       return {
         status: response.status,
         data: response.data,

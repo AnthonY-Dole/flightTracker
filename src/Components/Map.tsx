@@ -3,13 +3,15 @@ import {
   TileLayer,
   useMapEvents,
   useMapEvent,
+  Polyline,
 } from "react-leaflet";
-import L from "leaflet";
+import L, { map } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useRef, useState } from "react";
 import { getAPI } from "../api";
 import SearchUserLocalisation from "../Components/SearchUserLocation";
 import Planes from "./Planes";
+import { Padding, South } from "@mui/icons-material";
 const {
   VITE_APP_API_KEY_MAP_BOX,
   VITE_APP_API_MAP_BOX,
@@ -17,12 +19,14 @@ const {
 } = import.meta.env;
 const Map = () => {
   const [allPlanes, setAllPlanes] = useState<Array<any>>([]);
-  const mapRef = useRef(null);
-  const [bounds, setBounds] = useState<L.LatLngBounds>(
-    new L.LatLngBounds(new L.LatLng(0, 0), new L.LatLng(0, 0))
-  );
+  // const [bounds, setBounds] = useState<L.LatLngBounds>(
+  //   new L.LatLngBounds(new L.LatLng(0, 0), new L.LatLng(0, 0))
+  // );
+  const mapRef = useRef<L.Map>(null);
 
-  const getPlanesbyBounds = () => {
+  type Bounds = L.LatLngBounds;
+
+  const getPlanesbyBounds = (bounds: Bounds) => {
     getAPI(
       `flights?api_key=${VITE_APP_API_KEY_AIRLABS}&bbox=${
         bounds.getSouthWest().lat
@@ -38,24 +42,12 @@ const Map = () => {
     });
   };
 
-  useEffect(() => {
-    getPlanesbyBounds();
-  }, []);
-
-  // const getPlanes = () => {
-  //   getAPI(`flights?api_key=${VITE_APP_API_KEY_AIRLABS}`).then((res) => {
-  //     if (res.status === 200) {
-  //       setAllPlanes(res.data.response);
-  //     } else {
-  //       console.log(res);
-  //     }
-  //   });
-  // };
-
   const UserBounds = () => {
-    const map = useMapEvent("moveend", () => {
-      setBounds(map.getBounds());
-      getPlanesbyBounds();
+    const mapMove = useMapEvent("moveend", () => {
+      getPlanesbyBounds(mapMove.getBounds());
+    });
+    const mapZoom = useMapEvent("zoomend", () => {
+      getPlanesbyBounds(mapZoom.getBounds());
     });
 
     return null;
@@ -78,25 +70,17 @@ const Map = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      //getPlanesbyBounds();
+      // if (mapRef.current) getPlanesbyBounds(mapRef.current.getBounds());
     }, 20000);
     return () => clearInterval(interval);
   }, []);
-
-  // const filterBy = (data: any, filter: string) => {
-  //   if (data.length === 0) {
-  //     return null;
-  //   }
-  //   return data
-  //     .filter((x: { status: string }) => x.status !== "landed")
-  //     .map((x: any) => marker(x));
-  // };
 
   return (
     <MapContainer
       ref={mapRef}
       preferCanvas={true}
       center={[48.856614, 2.3522219]}
+      boundsOptions={{ padding: [50, 50] }}
       zoom={8}
       minZoom={4}
       maxZoom={18}
@@ -119,22 +103,27 @@ const Map = () => {
       <UserBounds />
 
       {allPlanes
-        ?.filter((p) => p.flight_number !== null && p.lat !== null && p.lng)
+        ?.filter(
+          (p: any) =>
+            p.hex !== null && p.status !== "landed" && p.status !== "unknown"
+        )
         .map((x: any, index) => (
-          <Planes
-            key={Number(x.flight_number)}
-            id={index}
-            lat={x.lat}
-            lng={x.lng}
-            location={[x.lat, x.lng]}
-            alt={x.alt}
-            direction={x.dir}
-            speed={x.speed}
-            flight_number={x.flight_number}
-            status={x.status}
-            airline_icao={x.airline_icao}
-            flag={x.flag}
-          />
+          <>
+            <Planes
+              key={x.hex}
+              id={index}
+              lat={x.lat}
+              lng={x.lng}
+              location={[x.lat, x.lng]}
+              alt={x.alt}
+              direction={x.dir}
+              speed={x.speed}
+              flight_number={x.flight_number}
+              status={x.status}
+              airline_icao={x.airline_icao}
+              flag={x.flag}
+            />
+          </>
         ))}
     </MapContainer>
   );
