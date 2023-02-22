@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Typography } from "@mui/material";
+import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import React from "react";
 
 type DetailProps = {
@@ -18,20 +18,32 @@ const Detail = (props: DetailProps) => {
             zIndex: 1000,
             position: "absolute",
             top: 200,
-            left: 10,
+            left: 15,
           }}
         >
           <Card
             sx={{
-              width: 275,
-              height: 275,
+              width: 285,
+
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
+              borderRadius: "20px",
             }}
           >
             <CardContent>
+              <CardMedia
+                component="img"
+                image="https://fakeimg.pl/250x150/?text=planeImage&font=lobster"
+                alt="plane"
+                sx={{
+                  display: "flex",
+                  width: 250,
+                  height: 150,
+                  borderRadius: "20px",
+                }}
+              />
               <div className="">
                 <h2 className="">Altitude: {selectedPlane?.alt} ft</h2>
                 <p className="">Speed: {selectedPlane?.speed} km/h</p>
