@@ -4,6 +4,7 @@ import { styled } from "@mui/material/styles";
 
 import FlightIcon from "@mui/icons-material/Flight";
 import Box from "@mui/material/Box";
+import { Chip, Typography } from "@mui/material";
 const BoxShadow =
   "0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.13),0 0 0 1px rgba(0,0,0,0.02)";
 const marks = [
@@ -106,6 +107,32 @@ export const CustomizedSlider = (props: CustomizedSliderProps) => {
         valueLabelDisplay="off"
         disabled={disabled}
       />
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginTop: 1,
+          flexDirection: "row",
+          marginLeft: 1,
+          marginRight: 1,
+        }}
+      >
+        <Typography variant="body2" sx={{ color: "#183566" }}>
+          {new Date().toLocaleTimeString()}
+        </Typography>
+        <Chip
+          label="2 hours"
+          size="small"
+          sx={{
+            backgroundColor: "#1aed79",
+            color: "#fff",
+            fontWeight: "bold",
+          }}
+        />
+        <Typography variant="body2" sx={{ color: "#183566" }}>
+          {new Date().toLocaleTimeString()}
+        </Typography>
+      </Box>
     </Box>
   );
 };
