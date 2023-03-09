@@ -13,7 +13,13 @@ import Paper from "@mui/material/Paper";
 import Divider from "@mui/material/Divider";
 import DirectionsIcon from "@mui/icons-material/Directions";
 
-export function CustomizedInputBase() {
+type CustomizedInputBaseProps = {
+  activate: boolean;
+  setActivate: (activate: boolean) => void;
+};
+
+export function CustomizedInputBase(props: CustomizedInputBaseProps) {
+  const { activate, setActivate } = props;
   return (
     <Paper
       component="form"
@@ -31,7 +37,14 @@ export function CustomizedInputBase() {
         <SearchIcon />
       </IconButton>
       <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-      <IconButton color="primary" sx={{ p: "10px" }} aria-label="directions">
+      <IconButton
+        color={activate ? "primary" : "error"}
+        sx={{ p: "10px" }}
+        aria-label="directions"
+        onClick={() => {
+          setActivate(!activate);
+        }}
+      >
         <AirplanemodeActiveIcon />
       </IconButton>
     </Paper>
@@ -59,7 +72,12 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.firstColor,
 }));
 
-export default function CustomAppBar() {
+type CustomAppBarProps = {
+  activate: boolean;
+  setActivate: (activate: boolean) => void;
+};
+export default function CustomAppBar(props: CustomAppBarProps) {
+  const { activate, setActivate } = props;
   return (
     <Box
       sx={{
@@ -76,7 +94,7 @@ export default function CustomAppBar() {
             Flight Tracker
           </Typography>
 
-          <CustomizedInputBase />
+          <CustomizedInputBase activate={activate} setActivate={setActivate} />
         </Toolbar>
       </StyledAppBar>
     </Box>

@@ -61,7 +61,7 @@ const Plane = (props: PlaneProps) => {
       ref={markerRef}
       position={[lat, lng]}
       previousPosition={prevPos as LatLngExpression}
-      duration={2000}
+      duration={20000}
       eventHandlers={{
         click: () => {
           selectPlane(id, true);

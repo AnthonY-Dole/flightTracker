@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Map from "../Components/Map";
 import CustomAppBar from "../Components/AppBar";
 import CardDetail from "../Components/CardDetail";
@@ -11,6 +11,7 @@ const Home = () => {
   const [allPlanes, setAllPlanes] = useState<Array<any>>([]);
   const [selectedPlane, setSelectedPlane] = useState<any>(null);
   const [open, setOpen] = useState(false);
+  const [activated, setActivated] = useState(false);
 
   const mapRef = useRef<L.Map>(null);
   const getPlanesbyBoundss = (bounds: L.LatLngBounds) => {
@@ -45,16 +46,23 @@ const Home = () => {
     return null;
   };
 
-  useEffect(() => {
+  useMemo(() => {
     const interval = setInterval(() => {
-      //  if (mapRef.current) getPlanesbyBounds(mapRef.current.getBounds());
+      if (activated == true && mapRef.current) {
+        getPlanesbyBoundss(mapRef.current.getBounds());
+      }
     }, 20000);
     return () => clearInterval(interval);
-  }, []);
+  }, [activated]);
 
   return (
     <>
-      <CustomAppBar />
+      <CustomAppBar
+        activate={activated}
+        setActivate={(activate: boolean) => {
+          setActivated(activate);
+        }}
+      />
       <CardDetail
         selectedPlane={selectedPlane}
         selectPlane={selectPlane}
