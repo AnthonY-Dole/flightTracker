@@ -4,13 +4,13 @@ import { CustomizedSlider } from "./Slider";
 import AirIcon from "@mui/icons-material/Air";
 import HeightIcon from "@mui/icons-material/Height";
 import InfoIcon from "@mui/icons-material/Info";
-type DetailProps = {
+type CardDetailProps = {
   selectedPlane: any;
   selectPlane: any;
   open: boolean;
 };
 
-const Detail = (props: DetailProps) =>
+const CardDetail = (props: CardDetailProps) =>
   useMemo(() => {
     const { selectedPlane, open } = props;
     if (!selectedPlane) {
@@ -173,7 +173,7 @@ const Detail = (props: DetailProps) =>
                         color: "#183566",
                       }}
                     >
-                      {selectedPlane?.alt} ft
+                      {selectedPlane?.alt} m
                     </Typography>
                   </Box>
                   <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -242,4 +242,4 @@ const Detail = (props: DetailProps) =>
     );
   }, [props]);
 
-export default Detail;
+export default CardDetail;

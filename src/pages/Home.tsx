@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Map from "../Components/Map";
 import CustomAppBar from "../Components/AppBar";
-import Detail from "../Components/Detail";
+import CardDetail from "../Components/CardDetail";
 import { useMapEvent } from "react-leaflet";
 import { getAPI } from "../utils/api";
 const { VITE_APP_API_KEY_AIRLABS } = import.meta.env;
@@ -11,6 +11,7 @@ const Home = () => {
   const [allPlanes, setAllPlanes] = useState<Array<any>>([]);
   const [selectedPlane, setSelectedPlane] = useState<any>(null);
   const [open, setOpen] = useState(false);
+
   const mapRef = useRef<L.Map>(null);
   const getPlanesbyBoundss = (bounds: L.LatLngBounds) => {
     getAPI(
@@ -54,7 +55,7 @@ const Home = () => {
   return (
     <>
       <CustomAppBar />
-      <Detail
+      <CardDetail
         selectedPlane={selectedPlane}
         selectPlane={selectPlane}
         open={open}

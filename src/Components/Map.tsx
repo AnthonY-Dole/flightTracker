@@ -7,13 +7,15 @@ import {
 } from "react-leaflet";
 import L, { map } from "leaflet";
 import "leaflet/dist/leaflet.css";
+import MarkerClusterGroup from "react-leaflet-cluster";
 import { forwardRef } from "react";
 import SearchUserLocalisation from "../Components/SearchUserLocation";
-import Planes from "./Planes";
+import Plane from "./Plane";
+import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
 const { VITE_APP_API_KEY_MAP_BOX, VITE_APP_API_MAP_BOX } = import.meta.env;
 
 type MapProps = {
-  Content: React.ElementType;
+  Content: React.FC;
   planes: Array<any>;
   selectedPlane: any;
   selectPlane: (id: any, isOpen: boolean) => void;
@@ -37,6 +39,32 @@ const Map = forwardRef<L.Map, MapProps>((props, ref) => {
   //   return null;
   // };
   //const Mapref = useRef<L.Map>(null);
+
+  const allPlane: ReactJSXElement[] = planes
+    ?.filter(
+      (p: any) =>
+        p.hex !== null && p.status !== "landed" && p.status !== "unknown"
+    )
+    .map((x: any, index) => {
+      return (
+        <Plane
+          key={x.hex}
+          id={index}
+          lat={x.lat}
+          lng={x.lng}
+          location={[x.lat, x.lng]}
+          alt={x.alt}
+          direction={x.dir}
+          speed={x.speed}
+          flight_number={x.flight_number}
+          status={x.status}
+          airline_icao={x.airline_icao}
+          flag={x.flag}
+          selectPlane={selectPlane}
+          open={open}
+        />
+      );
+    });
 
   return (
     <MapContainer
@@ -64,32 +92,9 @@ const Map = forwardRef<L.Map, MapProps>((props, ref) => {
       <SearchUserLocalisation />
 
       <Content />
-
-      {planes
-        ?.filter(
-          (p: any) =>
-            p.hex !== null && p.status !== "landed" && p.status !== "unknown"
-        )
-        .map((x: any, index) => (
-          <>
-            <Planes
-              key={x.hex}
-              id={index}
-              lat={x.lat}
-              lng={x.lng}
-              location={[x.lat, x.lng]}
-              alt={x.alt}
-              direction={x.dir}
-              speed={x.speed}
-              flight_number={x.flight_number}
-              status={x.status}
-              airline_icao={x.airline_icao}
-              flag={x.flag}
-              selectPlane={selectPlane}
-              open={open}
-            />
-          </>
-        ))}
+      {/* <MarkerClusterGroup chunkedLoading removeOutsideVisibleBounds> */}
+      {allPlane}
+      {/* </MarkerClusterGroup> */}
     </MapContainer>
   );
 });

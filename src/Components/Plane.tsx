@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Marker, Popup, Tooltip, Polyline } from "react-leaflet";
-import Plane from "../constant/constant";
+import PlaneIcon from "../constant/constant";
 import { locationUtils } from "../utils/locationUtils";
 import { LeafletTrackingMarker } from "react-leaflet-tracking-marker";
 import { LatLngExpression } from "leaflet";
 import ReactLeafletDriftMarker from "react-leaflet-drift-marker";
-type PlanesProps = {
+type PlaneProps = {
   key: string;
   location: [number, number];
   lat: number;
@@ -23,7 +23,7 @@ type PlanesProps = {
   open: boolean;
 };
 
-const Planes = (props: PlanesProps) => {
+const Plane = (props: PlaneProps) => {
   const {
     location,
     lat,
@@ -57,7 +57,7 @@ const Planes = (props: PlanesProps) => {
 
   return (
     <LeafletTrackingMarker
-      icon={Plane}
+      icon={PlaneIcon}
       ref={markerRef}
       position={[lat, lng]}
       previousPosition={prevPos as LatLngExpression}
@@ -122,4 +122,4 @@ const Planes = (props: PlanesProps) => {
   );
 };
 
-export default Planes;
+export default Plane;
