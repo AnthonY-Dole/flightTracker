@@ -1,4 +1,4 @@
-import PlaneSVG from "../assets/plane.png";
+import PlaneSVG from "../assets/airplane.svg";
 import * as L from "leaflet";
 
 const PlaneIcon = new L.Icon({

@@ -1,9 +1,10 @@
 import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
-import React, { useCallback, useMemo } from "react";
+import { useMemo } from "react";
 import { CustomizedSlider } from "./Slider";
 import AirIcon from "@mui/icons-material/Air";
 import HeightIcon from "@mui/icons-material/Height";
 import InfoIcon from "@mui/icons-material/Info";
+import PlaneIllustation from "../assets/planeIllustration.webp";
 type CardDetailProps = {
   selectedPlane: any;
   selectPlane: any;
@@ -42,7 +43,8 @@ const CardDetail = (props: CardDetailProps) =>
               <CardContent>
                 <CardMedia
                   component="img"
-                  image="https://fakeimg.pl/250x150/?text=planeImage&font=lobster"
+                  //image="https://fakeimg.pl/250x150/?text=planeImage&font=lobster"
+                  image={PlaneIllustation}
                   alt="plane"
                   sx={{
                     display: "flex",

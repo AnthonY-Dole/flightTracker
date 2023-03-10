@@ -6,7 +6,7 @@ import { useMapEvent } from "react-leaflet";
 import { getAPI } from "../utils/api";
 const { VITE_APP_API_KEY_AIRLABS } = import.meta.env;
 import { getPlanesbyBounds } from "../services/api";
-
+let interval = 0;
 const Home = () => {
   const [allPlanes, setAllPlanes] = useState<Array<any>>([]);
   const [selectedPlane, setSelectedPlane] = useState<any>(null);
@@ -46,12 +46,24 @@ const Home = () => {
     return null;
   };
 
-  useMemo(() => {
-    const interval = setInterval(() => {
-      if (activated == true && mapRef.current) {
-        getPlanesbyBoundss(mapRef.current.getBounds());
-      }
-    }, 20000);
+  /*const updatePlanes = useMemo(() => {
+    if (activated && mapRef.current) {
+      const intervals = setInterval(() => {
+        console.log(activated);
+        //getPlanesbyBoundss(mapRef.current?.getBounds() as L.LatLngBounds);
+      }, 3000);
+      return () => clearInterval(intervals);
+    }
+  }, [activated]);
+
+  useEffect(() => {}, [activated]);
+  */
+  useEffect(() => {
+    if (activated && mapRef.current) {
+      interval = setInterval(() => {
+        getPlanesbyBoundss(mapRef.current?.getBounds() as L.LatLngBounds);
+      }, 20000);
+    }
     return () => clearInterval(interval);
   }, [activated]);
 
@@ -61,6 +73,7 @@ const Home = () => {
         activate={activated}
         setActivate={(activate: boolean) => {
           setActivated(activate);
+          clearInterval(interval);
         }}
       />
       <CardDetail
